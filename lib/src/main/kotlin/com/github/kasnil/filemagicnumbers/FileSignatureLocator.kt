@@ -14,5 +14,6 @@ class FileSignatureLocator : SignatureLocator<FileSignature> {
                 Bmp(),
                 Jxr(),
                 Psd(),
+                Ico(),
             )
 }

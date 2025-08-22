@@ -94,4 +94,13 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
         assertNotNull(actual)
         assertEquals(expected, actual!!)
     }
+
+    @Test
+    fun identifyIco() {
+        val expected = Ico().fileType
+        val actual = getFileTypeIdentifier().identify(readResourceFileAsInputStream("/images/sample.ico"))
+
+        assertNotNull(actual)
+        assertEquals(expected, actual!!)
+    }
 }

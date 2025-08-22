@@ -63,3 +63,8 @@ class Psd : FileSignature("psd", "image/vnd.adobe.photoshop") {
     override val signatures: Array<Signature>
         get() = arrayOf(Signature(buildByteArray(0x38, 0x42, 0x50, 0x53)))
 }
+
+class Ico : FileSignature("ico", "image/vnd.microsoft.icon") {
+    override val signatures: Array<Signature>
+        get() = arrayOf(Signature(buildByteArray(0x00, 0x00, 0x01, 0x00)))
+}
