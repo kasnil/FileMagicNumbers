@@ -13,5 +13,6 @@ class FileSignatureLocator : SignatureLocator<FileSignature> {
                 Tiff(),
                 Bmp(),
                 Jxr(),
+                Psd(),
             )
 }

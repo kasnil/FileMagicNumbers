@@ -58,3 +58,8 @@ class Jxr : FileSignature("jxr", "image/vnd.ms-photo") {
     override val signatures: Array<Signature>
         get() = arrayOf(Signature(buildByteArray(0x49, 0x49, 0xBC)))
 }
+
+class Psd : FileSignature("psd", "image/vnd.adobe.photoshop") {
+    override val signatures: Array<Signature>
+        get() = arrayOf(Signature(buildByteArray(0x38, 0x42, 0x50, 0x53)))
+}

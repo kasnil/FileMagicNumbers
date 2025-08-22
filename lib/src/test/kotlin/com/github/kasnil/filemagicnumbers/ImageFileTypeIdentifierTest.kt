@@ -85,4 +85,13 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
         assertNotNull(actual)
         assertEquals(expected, actual!!)
     }
+
+    @Test
+    fun identifyPsd() {
+        val expected = Psd().fileType
+        val actual = getFileTypeIdentifier().identify(readResourceFileAsInputStream("/images/sample.psd"))
+
+        assertNotNull(actual)
+        assertEquals(expected, actual!!)
+    }
 }
