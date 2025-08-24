@@ -143,3 +143,8 @@ class Heif : FileSignature("heif", "image/heif") {
         }
     }
 }
+
+class Dwg : FileSignature("dwg", "image/vnd.dwg") {
+    override val signatures: Array<Signature>
+        get() = arrayOf(Signature(buildByteArray(0x41, 0x43, 0x31, 0x30)))
+}

@@ -112,4 +112,13 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
         assertNotNull(actual)
         assertEquals(expected, actual!!)
     }
+
+    @Test
+    fun identifyDwg() {
+        val expected = Dwg().fileType
+        val actual = getFileTypeIdentifier().identify(readResourceFileAsInputStream("/images/sample.dwg"))
+
+        assertNotNull(actual)
+        assertEquals(expected, actual!!)
+    }
 }
