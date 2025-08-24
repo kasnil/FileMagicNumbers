@@ -77,10 +77,12 @@ class Heif : FileSignature("heif", "image/heif") {
         get() = arrayOf()
 
     override fun isMatch(stream: InputStream): Boolean {
-        val ftypLength: UInt
+        val ftypLength: Int
         val charset = Charsets.US_ASCII
+        val majorBrand: String
+        val minorVersion: String
         try {
-            val size = 17
+            val size = 16
 
             stream.mark(size)
 
@@ -96,36 +98,35 @@ class Heif : FileSignature("heif", "image/heif") {
                 return false
             }
 
-            ftypLength = buffer.getUIntAt(0)
+            majorBrand = buffer.slice(8..<12).toByteArray().toString(charset)
+            if (majorBrand == "heic") {
+                return true
+            }
+
+            minorVersion = buffer.slice(12..<16).toByteArray().toString(charset)
+
+            ftypLength = buffer.getUIntAt(0).toInt()
         } finally {
             stream.reset()
         }
 
         try {
-            stream.mark(ftypLength.toInt())
+            stream.mark(ftypLength)
 
-            val buffer = ByteArray(ftypLength.toInt()) { 0 }
+            val offset = 16L
+            val size = ftypLength - offset.toInt()
+
+            stream.skip(offset)
+
+            val buffer = ByteArray(size) { 0 }
             val n = stream.read(buffer)
 
             if (buffer.size != n) {
                 return false
             }
 
-            val charset = Charsets.UTF_8
-            val format = buffer.slice(4..<8).toByteArray().toString(Charsets.US_ASCII)
-            if (format != "ftyp") {
-                return false
-            }
-
-            val majorBrand = buffer.slice(8..<12).toByteArray().toString(charset)
-            if (majorBrand == "heic") {
-                return true
-            }
-
-            val minorVersion = buffer.slice(12..<16).toByteArray().toString(charset)
-
             val compatibleBrands = mutableListOf<String>()
-            for (i in (16..<ftypLength.toInt()).step(4)) {
+            for (i in (0..<buffer.size).step(4)) {
                 if (buffer.size >= (i + 4)) {
                     compatibleBrands += buffer.slice(i..<(i + 4)).toByteArray().toString(charset)
                 }
