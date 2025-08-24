@@ -104,6 +104,9 @@ class Heif : FileSignature("heif", "image/heif") {
             }
 
             minorVersion = buffer.slice(12..<16).toByteArray().toString(charset)
+            if ((majorBrand != "mif1") && (majorBrand != "msf1")) {
+                return false
+            }
 
             ftypLength = buffer.getUIntAt(0).toInt()
         } finally {
@@ -132,10 +135,8 @@ class Heif : FileSignature("heif", "image/heif") {
                 }
             }
 
-            if ((majorBrand == "mif1") || (majorBrand == "msf1")) {
-                if (compatibleBrands.any { compatibleBrand -> compatibleBrand == "heic" }) {
-                    return true
-                }
+            if (compatibleBrands.any { compatibleBrand -> compatibleBrand == "heic" }) {
+                return true
             }
 
             return false
