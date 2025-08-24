@@ -1,5 +1,8 @@
 package com.github.kasnil.filemagicnumbers
 
+import java.io.InputStream
+import kotlin.collections.toString
+
 class Jpeg : FileSignature("jpg", "image/jpeg") {
     override val signatures: Array<Signature>
         get() = arrayOf(Signature(buildByteArray(0xFF, 0xD8, 0xFF)))
@@ -67,4 +70,76 @@ class Psd : FileSignature("psd", "image/vnd.adobe.photoshop") {
 class Ico : FileSignature("ico", "image/vnd.microsoft.icon") {
     override val signatures: Array<Signature>
         get() = arrayOf(Signature(buildByteArray(0x00, 0x00, 0x01, 0x00)))
+}
+
+class Heif : FileSignature("heif", "image/heif") {
+    override val signatures: Array<Signature>
+        get() = arrayOf()
+
+    override fun isMatch(stream: InputStream): Boolean {
+        val ftypLength: UInt
+        val charset = Charsets.US_ASCII
+        try {
+            val size = 17
+
+            stream.mark(size)
+
+            val buffer = ByteArray(size) { 0 }
+            val n = stream.read(buffer)
+
+            if (buffer.size != n) {
+                return false
+            }
+
+            val format = buffer.slice(4..<8).toByteArray().toString(charset)
+            if (format != "ftyp") {
+                return false
+            }
+
+            ftypLength = buffer.getUIntAt(0)
+        } finally {
+            stream.reset()
+        }
+
+        try {
+            stream.mark(ftypLength.toInt())
+
+            val buffer = ByteArray(ftypLength.toInt()) { 0 }
+            val n = stream.read(buffer)
+
+            if (buffer.size != n) {
+                return false
+            }
+
+            val charset = Charsets.UTF_8
+            val format = buffer.slice(4..<8).toByteArray().toString(Charsets.US_ASCII)
+            if (format != "ftyp") {
+                return false
+            }
+
+            val majorBrand = buffer.slice(8..<12).toByteArray().toString(charset)
+            if (majorBrand == "heic") {
+                return true
+            }
+
+            val minorVersion = buffer.slice(12..<16).toByteArray().toString(charset)
+
+            val compatibleBrands = mutableListOf<String>()
+            for (i in (16..<ftypLength.toInt()).step(4)) {
+                if (buffer.size >= (i + 4)) {
+                    compatibleBrands += buffer.slice(i..<(i + 4)).toByteArray().toString(charset)
+                }
+            }
+
+            if ((majorBrand == "mif1") || (majorBrand == "msf1")) {
+                if (compatibleBrands.any { compatibleBrand -> compatibleBrand == "heic" }) {
+                    return true
+                }
+            }
+
+            return false
+        } finally {
+            stream.reset()
+        }
+    }
 }

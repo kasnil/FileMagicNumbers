@@ -103,4 +103,13 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
         assertNotNull(actual)
         assertEquals(expected, actual!!)
     }
+
+    @Test
+    fun identifyHeif() {
+        val expected = Heif().fileType
+        val actual = getFileTypeIdentifier().identify(readResourceFileAsInputStream("/images/sample.heif"))
+
+        assertNotNull(actual)
+        assertEquals(expected, actual!!)
+    }
 }
