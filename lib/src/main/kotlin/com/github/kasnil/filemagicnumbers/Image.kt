@@ -109,6 +109,9 @@ class Heif : FileSignature("heif", "image/heif") {
             }
 
             ftypLength = buffer.getUIntAt(0).toInt()
+            if (ftypLength < buffer.size) {
+                return false
+            }
         } finally {
             stream.reset()
         }
@@ -149,4 +152,9 @@ class Heif : FileSignature("heif", "image/heif") {
 class Dwg : FileSignature("dwg", "image/vnd.dwg") {
     override val signatures: Array<Signature>
         get() = arrayOf(Signature(buildByteArray(0x41, 0x43, 0x31, 0x30)))
+}
+
+class Exr : FileSignature("exr", "image/x-exr") {
+    override val signatures: Array<Signature>
+        get() = arrayOf(Signature(buildByteArray(0x76, 0x2F, 0x31, 0x01)))
 }

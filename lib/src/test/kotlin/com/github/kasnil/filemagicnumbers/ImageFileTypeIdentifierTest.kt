@@ -121,4 +121,13 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
         assertNotNull(actual)
         assertEquals(expected, actual!!)
     }
+
+    @Test
+    fun identifyExr() {
+        val expected = Exr().fileType
+        val actual = getFileTypeIdentifier().identify(readResourceFileAsInputStream("/images/sample.exr"))
+
+        assertNotNull(actual)
+        assertEquals(expected, actual!!)
+    }
 }
