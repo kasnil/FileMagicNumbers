@@ -14,6 +14,15 @@ class FontFileTypeIdentifierTest : FileTypeIdentifierTest() {
         assertEquals(expected, actual!!)
     }
 
+    @Test
+    fun identifyWoff2() {
+        val expected = Woff2().fileType
+        val actual = getFileTypeIdentifier("sample.woff2")
+
+        assertNotNull(actual)
+        assertEquals(expected, actual!!)
+    }
+
     private fun getFileTypeIdentifier(fileName: String) = 
         getFileTypeIdentifier().identify(readResourceFileAsInputStream("/fonts/" + fileName))
 }

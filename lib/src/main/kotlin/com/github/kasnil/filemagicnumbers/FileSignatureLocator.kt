@@ -21,5 +21,6 @@ class FileSignatureLocator : SignatureLocator<FileSignature> {
                 Avif(),
 
                 Woff(),
+                Woff2(),
             )
 }
