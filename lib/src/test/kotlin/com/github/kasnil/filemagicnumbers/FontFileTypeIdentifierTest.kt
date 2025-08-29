@@ -32,6 +32,15 @@ class FontFileTypeIdentifierTest : FileTypeIdentifierTest() {
         assertEquals(expected, actual!!)
     }
 
+    @Test
+    fun identifyOtf() {
+        val expected = Otf().fileType
+        val actual = getFileTypeIdentifier("sample.otf")
+
+        assertNotNull(actual)
+        assertEquals(expected, actual!!)
+    }
+
     private fun getFileTypeIdentifier(fileName: String) = 
         getFileTypeIdentifier().identify(readResourceFileAsInputStream("/fonts/" + fileName))
 }

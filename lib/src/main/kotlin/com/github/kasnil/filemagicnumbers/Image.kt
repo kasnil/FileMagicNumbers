@@ -25,7 +25,7 @@ class Gif : FileSignature("gif", "image/gif") {
 
 class Webp : FileSignature("webp", "image/webp") {
     override val signatures: Array<Signature>
-        get() = arrayOf(Signature(buildByteArray(0x57, 0x45, 0x42, 0x50), offset = 8L))
+        get() = arrayOf(Signature(arrayOf(SignatureMatcher(buildByteArray(0x57, 0x45, 0x42, 0x50), offset = 8L))))
 }
 
 class CR2 : FileSignature("cr2", "image/x-canon-cr2") {

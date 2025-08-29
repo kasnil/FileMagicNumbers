@@ -9,52 +9,67 @@ abstract class FileSignature(
     val fileType: FileType = FileType(extension, MIME.from(template))
     abstract val signatures: Array<Signature>
 
-    open fun isMatch(stream: InputStream): Boolean {
-        for (signature in signatures) {
-            try {
-                stream.mark(signature.match.size)
-
-                stream.skip(signature.offset)
-
-                val buffer = ByteArray(signature.length) { 0 }
-
-                val n = stream.read(buffer)
-                if (buffer.size != signature.length) {
-                    continue
-                }
-
-                if (isMatch(signature, buffer)) {
-                    return true
-                }
-            } finally {
-                stream.reset()
-            }
+    open fun isMatch(stream: InputStream) =
+        signatures.any { signature ->
+            signature.match?.all { matcher -> isMatch(matcher, stream) } ?: true &&
+                signature.notMatch?.all { matcher -> isNotMatch(matcher, stream) } ?: true
         }
-
-        return false
-    }
 
     private fun isMatch(
-        signature: Signature,
-        buffer: ByteArray,
+        matcher: SignatureMatcher?,
+        stream: InputStream,
     ): Boolean {
-        if (signature.length != buffer.size) {
-            return false
+        if (matcher == null) {
+            return true
         }
+        try {
+            stream.mark(matcher.value.size)
 
-        for (index in 0..<signature.match.size) {
-            val matchSignatureByte = signature.match[index]
-            if (matchSignatureByte == null) {
-                continue
-            }
-            if (matchSignatureByte != buffer[index]) {
+            stream.skip(matcher.offset)
+
+            val buffer = ByteArray(matcher.value.size) { 0 }
+
+            val n = stream.read(buffer)
+            if (n != matcher.value.size) {
                 return false
             }
-        }
 
-        if (!signature.notMatch.isNullOrEmpty()) {
-            for (index in 0..<signature.notMatch.size) {
-                val notMatchSignatureByte = signature.notMatch[index]
+            for (index in 0..<matcher.value.size) {
+                val matchSignatureByte = matcher.value[index]
+                if (matchSignatureByte == null) {
+                    continue
+                }
+                if (matchSignatureByte != buffer[index]) {
+                    return false
+                }
+            }
+            return true
+        } finally {
+            stream.reset()
+        }
+    }
+
+    private fun isNotMatch(
+        matcher: SignatureMatcher?,
+        stream: InputStream,
+    ): Boolean {
+        if (matcher == null) {
+            return true
+        }
+        try {
+            stream.mark(matcher.value.size)
+
+            stream.skip(matcher.offset)
+
+            val buffer = ByteArray(matcher.value.size) { 0 }
+
+            val n = stream.read(buffer)
+            if (n != matcher.value.size) {
+                return false
+            }
+
+            for (index in 0..<matcher.value.size) {
+                val notMatchSignatureByte = matcher.value[index]
                 if (notMatchSignatureByte == null) {
                     continue
                 }
@@ -62,8 +77,9 @@ abstract class FileSignature(
                     return false
                 }
             }
+            return true
+        } finally {
+            stream.reset()
         }
-
-        return true
     }
 }

@@ -1,14 +1,20 @@
 package com.github.kasnil.filemagicnumbers
 
-import kotlin.math.max
-
 data class Signature(
-    val match: Array<Byte?>,
-    val notMatch: Array<Byte?>? = null,
-    val offset: Long = 0,
+    val match: Array<SignatureMatcher>,
+    val notMatch: Array<SignatureMatcher>? = null,
 ) {
-    val length: Int
-        get() = max(match.size, notMatch?.size ?: 0)
+    constructor(match: SignatureMatcher, notMatch: SignatureMatcher? = null) : this(
+        arrayOf(match),
+        if (notMatch != null) arrayOf(notMatch) else null,
+    ) {
+    }
+
+    constructor(matchSignature: Array<Byte?>, notMatchSignature: Array<Byte?>? = null) : this(
+        arrayOf(SignatureMatcher(matchSignature)),
+        if (notMatchSignature != null) arrayOf(SignatureMatcher(notMatchSignature)) else null,
+    ) {
+    }
 }
 
 fun buildByteArray(vararg args: Int?) =
