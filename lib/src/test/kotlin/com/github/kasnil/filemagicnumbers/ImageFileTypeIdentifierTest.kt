@@ -130,4 +130,13 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
         assertNotNull(actual)
         assertEquals(expected, actual!!)
     }
+
+    @Test
+    fun identifyAvif() {
+        val expected = Avif().fileType
+        val actual = getFileTypeIdentifier().identify(readResourceFileAsInputStream("/images/sample.avif"))
+
+        assertNotNull(actual)
+        assertEquals(expected, actual!!)
+    }
 }

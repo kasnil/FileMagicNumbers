@@ -158,3 +158,80 @@ class Exr : FileSignature("exr", "image/x-exr") {
     override val signatures: Array<Signature>
         get() = arrayOf(Signature(buildByteArray(0x76, 0x2F, 0x31, 0x01)))
 }
+
+class Avif : FileSignature("avif", "image/avif") {
+    override val signatures: Array<Signature>
+        get() = arrayOf()
+
+    override fun isMatch(stream: InputStream): Boolean {
+        val ftypLength: Int
+        val charset = Charsets.US_ASCII
+        val majorBrand: String
+        val minorVersion: String
+        try {
+            val size = 16
+
+            stream.mark(size)
+
+            val buffer = ByteArray(size) { 0 }
+            val n = stream.read(buffer)
+
+            if (buffer.size != n) {
+                return false
+            }
+
+            val format = buffer.slice(4..<8).toByteArray().toString(charset)
+            if (format != "ftyp") {
+                return false
+            }
+
+            majorBrand = buffer.slice(8..<12).toByteArray().toString(charset)
+            if (majorBrand == "avif") {
+                return true
+            }
+
+            minorVersion = buffer.slice(12..<16).toByteArray().toString(charset)
+            if ((majorBrand != "mif1") && (majorBrand != "msf1")) {
+                return false
+            }
+
+            ftypLength = buffer.getUIntAt(0).toInt()
+            if (ftypLength < buffer.size) {
+                return false
+            }
+        } finally {
+            stream.reset()
+        }
+
+        try {
+            stream.mark(ftypLength)
+
+            val offset = 16L
+            val size = ftypLength - offset.toInt()
+
+            stream.skip(offset)
+
+            val buffer = ByteArray(size) { 0 }
+            val n = stream.read(buffer)
+
+            if (buffer.size != n) {
+                return false
+            }
+
+            val compatibleBrands = mutableListOf<String>()
+            for (i in (0..<buffer.size).step(4)) {
+                if (buffer.size >= (i + 4)) {
+                    compatibleBrands += buffer.slice(i..<(i + 4)).toByteArray().toString(charset)
+                }
+            }
+
+            if (compatibleBrands.any { compatibleBrand -> compatibleBrand == "heic" }) {
+                return true
+            }
+
+            return false
+        } finally {
+            stream.reset()
+        }
+    }
+}

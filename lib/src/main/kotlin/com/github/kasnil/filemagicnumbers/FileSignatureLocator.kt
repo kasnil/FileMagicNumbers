@@ -18,5 +18,6 @@ class FileSignatureLocator : SignatureLocator<FileSignature> {
                 Heif(),
                 Dwg(),
                 Exr(),
+                Avif(),
             )
 }
