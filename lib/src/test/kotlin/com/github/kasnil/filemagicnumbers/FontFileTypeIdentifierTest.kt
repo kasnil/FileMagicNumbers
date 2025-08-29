@@ -23,6 +23,15 @@ class FontFileTypeIdentifierTest : FileTypeIdentifierTest() {
         assertEquals(expected, actual!!)
     }
 
+    @Test
+    fun identifyTtf() {
+        val expected = Ttf().fileType
+        val actual = getFileTypeIdentifier("sample.ttf")
+
+        assertNotNull(actual)
+        assertEquals(expected, actual!!)
+    }
+
     private fun getFileTypeIdentifier(fileName: String) = 
         getFileTypeIdentifier().identify(readResourceFileAsInputStream("/fonts/" + fileName))
 }
