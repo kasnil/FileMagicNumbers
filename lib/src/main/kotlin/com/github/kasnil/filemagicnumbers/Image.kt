@@ -42,12 +42,12 @@ class Tiff : FileSignature("tif", "image/tiff") {
         get() =
             arrayOf(
                 Signature(
-                    buildByteArray(0x49, 0x49, 0x2A, 0x00),
-                    buildByteArray(null, null, null, null, null, null, null, null, 0x43, 0x52),
+                    arrayOf(SignatureMatcher(buildByteArray(0x49, 0x49, 0x2A, 0x00))),
+                    arrayOf(SignatureMatcher(buildByteArray(0x43, 0x52), offset = 8L)),
                 ),
                 Signature(
-                    buildByteArray(0x4D, 0x4D, 0x00, 0x2A),
-                    buildByteArray(null, null, null, null, null, null, null, null, 0x43, 0x52),
+                    arrayOf(SignatureMatcher(buildByteArray(0x4D, 0x4D, 0x00, 0x2A))),
+                    arrayOf(SignatureMatcher(buildByteArray(0x43, 0x52), offset = 8L)),
                 ),
             )
 }
