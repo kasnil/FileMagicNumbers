@@ -37,7 +37,7 @@ class CR2 : FileSignature("cr2", "image/x-canon-cr2") {
             )
 }
 
-class Tiff : FileSignature("tif", "image/tiff") {
+class Tiff : FileSignature("tiff", "image/tiff") {
     override val signatures: Array<Signature>
         get() =
             arrayOf(

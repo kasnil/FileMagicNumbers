@@ -8,7 +8,7 @@ class FontFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyWoff() {
         val expected = Woff().fileType
-        val actual = getFileTypeIdentifier("sample.woff")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
@@ -17,7 +17,7 @@ class FontFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyWoff2() {
         val expected = Woff2().fileType
-        val actual = getFileTypeIdentifier("sample.woff2")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
@@ -26,7 +26,7 @@ class FontFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyTtf() {
         val expected = Ttf().fileType
-        val actual = getFileTypeIdentifier("sample.ttf")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
@@ -35,12 +35,12 @@ class FontFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyOtf() {
         val expected = Otf().fileType
-        val actual = getFileTypeIdentifier("sample.otf")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
     }
 
-    private fun getFileTypeIdentifier(fileName: String) = 
-        getFileTypeIdentifier().identify(readResourceFileAsInputStream("/fonts/" + fileName))
+    private fun getFileTypeIdentifier(fileType: FileType) =
+        getFileTypeIdentifier().identify(readResourceFileAsInputStream("/fonts/sample." + fileType.extension))
 }

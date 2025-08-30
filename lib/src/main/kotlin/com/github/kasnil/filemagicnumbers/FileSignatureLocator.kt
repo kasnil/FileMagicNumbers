@@ -24,5 +24,15 @@ class FileSignatureLocator : SignatureLocator<FileSignature> {
                 Woff2(),
                 Ttf(),
                 Otf(),
+
+                Midi(),
+                Mp3(),
+                M4a(),
+                Ogg(),
+                Flac(),
+                Wav(),
+                Amr(),
+                Aac(),
+                Aiff(),
             )
 }

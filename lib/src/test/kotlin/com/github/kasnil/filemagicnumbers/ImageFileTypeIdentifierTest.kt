@@ -8,7 +8,7 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyJpeg() {
         val expected = Jpeg().fileType
-        val actual = getFileTypeIdentifier("sample.jpg")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
@@ -17,7 +17,7 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyJpeg2000() {
         val expected = Jpeg2000().fileType
-        val actual = getFileTypeIdentifier("sample.jp2")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
@@ -26,7 +26,7 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyPng() {
         val expected = Png().fileType
-        val actual = getFileTypeIdentifier("sample.png")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
@@ -35,7 +35,7 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyGif() {
         val expected = Gif().fileType
-        val actual = getFileTypeIdentifier("sample.gif")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
@@ -44,7 +44,7 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyWebp() {
         val expected = Webp().fileType
-        val actual = getFileTypeIdentifier("sample.webp")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
@@ -53,7 +53,7 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyCR2() {
         val expected = CR2().fileType
-        val actual = getFileTypeIdentifier("sample.cr2")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
@@ -62,7 +62,7 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyTiff() {
         val expected = Tiff().fileType
-        val actual = getFileTypeIdentifier("sample.tiff")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
@@ -71,7 +71,7 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyBmp() {
         val expected = Bmp().fileType
-        val actual = getFileTypeIdentifier("sample.bmp")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
@@ -80,7 +80,7 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyJxr() {
         val expected = Jxr().fileType
-        val actual = getFileTypeIdentifier("sample.jxr")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
@@ -89,7 +89,7 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyPsd() {
         val expected = Psd().fileType
-        val actual = getFileTypeIdentifier("sample.psd")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
@@ -98,7 +98,7 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyIco() {
         val expected = Ico().fileType
-        val actual = getFileTypeIdentifier("sample.ico")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
@@ -107,7 +107,7 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyHeif() {
         val expected = Heif().fileType
-        val actual = getFileTypeIdentifier("sample.heif")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
@@ -116,7 +116,7 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyDwg() {
         val expected = Dwg().fileType
-        val actual = getFileTypeIdentifier("sample.dwg")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
@@ -125,7 +125,7 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyExr() {
         val expected = Exr().fileType
-        val actual = getFileTypeIdentifier("sample.exr")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
@@ -134,12 +134,12 @@ class ImageFileTypeIdentifierTest : FileTypeIdentifierTest() {
     @Test
     fun identifyAvif() {
         val expected = Avif().fileType
-        val actual = getFileTypeIdentifier("sample.avif")
+        val actual = getFileTypeIdentifier(expected)
 
         assertNotNull(actual)
         assertEquals(expected, actual!!)
     }
 
-    private fun getFileTypeIdentifier(fileName: String) = 
-        getFileTypeIdentifier().identify(readResourceFileAsInputStream("/images/" + fileName))
+    private fun getFileTypeIdentifier(fileType: FileType) =
+        getFileTypeIdentifier().identify(readResourceFileAsInputStream("/images/sample." + fileType.extension))
 }
